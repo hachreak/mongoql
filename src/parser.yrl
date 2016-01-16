@@ -34,9 +34,9 @@ expr_list -> order : ['$1'].
 expr_list -> order expr_list : ['$1' | '$2'].
 expr_list -> filter expr_list : ['$1' | '$2'].
 
-filter -> field comp_op field : {unwrap('$1'), {unwrap('$2'), unwrap('$3')}}.
-filter -> field comp_op integer : {unwrap('$1'), {unwrap('$2'), unwrap('$3')}}.
-filter -> field comp_op float : {unwrap('$1'), {unwrap('$2'), unwrap('$3')}}.
+filter -> field comp_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field comp_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field comp_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
 order -> order_descending : {unwrap('$1'), -1}.
@@ -46,3 +46,10 @@ Erlang code.
 
 unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V.
+
+comp_op_conv(<<"<">>) -> <<"$lt">>;
+comp_op_conv(<<"<=">>) -> <<"$lte">>;
+comp_op_conv(<<"==">>) -> <<"$eq">>;
+comp_op_conv(<<">=">>) -> <<"$ge">>;
+comp_op_conv(<<">">>) -> <<"$gt">>;
+comp_op_conv(<<"!=">>) -> <<"$ne">>.
