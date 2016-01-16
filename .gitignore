@@ -18,3 +18,5 @@ _tdeps
 logs
 _build
 rebar.lock
+src/lexer.erl
+src/parser.erl
