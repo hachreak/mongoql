@@ -52,8 +52,8 @@ unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V.
 
 comp_op_conv(<<"<">>) -> <<"$lt">>;
-comp_op_conv(<<"<=">>) -> <<"$lte">>;
-comp_op_conv(<<"==">>) -> <<"$eq">>;
-comp_op_conv(<<">=">>) -> <<"$ge">>;
+comp_op_conv(<<"<:">>) -> <<"$lte">>;
+comp_op_conv(<<":">>) -> <<"$eq">>;
+comp_op_conv(<<">:">>) -> <<"$ge">>;
 comp_op_conv(<<">">>) -> <<"$gt">>;
-comp_op_conv(<<"!=">>) -> <<"$ne">>.
+comp_op_conv(<<"!:">>) -> <<"$ne">>.
