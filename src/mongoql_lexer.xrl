@@ -26,8 +26,8 @@ LETTER = [a-zA-Z_\.]
 STRING = "(\\\^.|\\.|[^\"])*"
 WHITESPACE = [\s\t\n\r]
 ARITHM_OP = [+-]
-EQUAL_OP = (:)
-COMP_OP = (<|<:|>:|>|!:)
+EQUAL_OP = (:|!:)
+COMP_OP = (<|<:|>:|>)
 
 Rules.
 
