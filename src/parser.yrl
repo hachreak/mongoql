@@ -19,7 +19,7 @@
 %%% @end
 
 Terminals
-  comp_op integer float order_ascending order_descending field.
+  comp_op integer float order_ascending order_descending field string equal_op.
 
 Nonterminals
   filter order grammar expr_list.
@@ -34,9 +34,13 @@ expr_list -> order : ['$1'].
 expr_list -> order expr_list : ['$1' | '$2'].
 expr_list -> filter expr_list : ['$1' | '$2'].
 
+filter -> field equal_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field equal_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field equal_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field equal_op string : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
 order -> order_descending : {unwrap('$1'), -1}.
