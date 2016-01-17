@@ -1,6 +1,8 @@
 mongoql
 =======
 
+[![Build Status](https://travis-ci.org/hachreak/mongoql.svg?branch=master)](https://travis-ci.org/hachreak/mongoql)
+
 An OTP library to translate a special search query language in a MongoDB query.
 
 
@@ -51,7 +53,7 @@ Op. | Name             | Example
  :  | Equal            | `temperature : 5` or `name : "FuuBar"`
  >: | Major Equal      | `temperature >: 2`
  >  | Major            | `temperature > 4.4`
- !: | Not Equal        | `temperature !: 4` or `name |: "FuuBar"`
+ !: | Not Equal        | `temperature !: 4` or `name !: "FuuBar"`
  +  | Order Ascending  | `+name`
  -  | Order Descending | `-name`
 
