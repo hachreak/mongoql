@@ -1,6 +1,6 @@
 {application, 'mongoql',
  [{description,
-   "An OTP library to translate a SQL-like query in a MongoDB query."},
+   "An OTP library to translate a search query language in a MongoDB query."},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,

@@ -1,7 +1,7 @@
 mongoql
 =======
 
-An OTP library to translate a SQL-like query in a MongoDB query.
+An OTP library to translate a search query language in a MongoDB query.
 
 
 Examples
@@ -40,6 +40,21 @@ MyQueryString = "house.temperature>23 house.city:\"Milano\" house.pression<:1015
 {ok, Query} = mongoql:parse(MyQueryString),
 mongopool_app:find(Pool, Table, Query).
 ```
+
+Operators
+---------
+
+Op. | Name             | Example
+----|------------------|------------------------------------------
+ <  | Minor            | `temperature < 10.5`
+ <: | Minor Equal      | `temperature <: 7.3`
+ :  | Equal            | `temperature : 5` or `name : "FuuBar"`
+ >: | Major Equal      | `temperature >: 2`
+ >  | Major            | `temperature > 4.4`
+ !: | Not Equal        | `temperature !: 4` or `name |: "FuuBar"`
+ +  | Order Ascending  | `+name`
+ -  | Order Descending | `-name`
+
 
 Build
 -----
