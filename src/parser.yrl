@@ -22,17 +22,17 @@ Terminals
   comp_op integer float order_ascending order_descending field string equal_op.
 
 Nonterminals
-  filter order grammar expr_list.
+  filter order grammar filters orders.
 
 Rootsymbol grammar.
 
 
-grammar -> expr_list : '$1'.
+grammar -> filters orders : query('$1', '$2').
 
-expr_list -> filter : ['$1'].
-expr_list -> order : ['$1'].
-expr_list -> order expr_list : ['$1' | '$2'].
-expr_list -> filter expr_list : ['$1' | '$2'].
+filters -> filter : ['$1'].
+filters -> filter filters : ['$1' | '$2'].
+orders -> order : ['$1'].
+orders -> order orders : ['$1' | '$2'].
 
 filter -> field equal_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
@@ -47,6 +47,8 @@ order -> order_descending : {unwrap('$1'), -1}.
 
 
 Erlang code.
+
+query(Filters, Orders) -> {'$query', {'$and', Filters}, '$orderby', Orders}.
 
 unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V.
