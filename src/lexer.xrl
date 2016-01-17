@@ -22,7 +22,7 @@ Definitions.
 
 INT = [0-9]
 FLOAT = [0-9]+\.[0-9]+
-LETTER = [a-zA-Z_]
+LETTER = [a-zA-Z_\.]
 STRING = "(\\\^.|\\.|[^\"])*"
 WHITESPACE = [\s\t\n\r]
 ARITHM_OP = [+-]
@@ -32,7 +32,6 @@ COMP_OP = (<|<=|>=|>|!=)
 Rules.
 
 {WHITESPACE}+ : skip_token.
-% ({LETTER}+)({WHITESPACE}+)?({COMP_OP})({WHITESPACE}+)?({INT}+|{FLOAT}|{LETTER}+) : {token, {filter, TokenLine, TokenChars}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
 {STRING} : {token, {string, TokenLine, list_to_binary(string:substr(TokenChars, 2, string:len(TokenChars) - 2))}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
