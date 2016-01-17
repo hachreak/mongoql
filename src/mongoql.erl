@@ -46,7 +46,7 @@ parse(Query) when is_binary(Query) ->
   parse(binary_to_list(Query));
 parse(Query) when is_list(Query) ->
   {ok, Tokens, _} = mongoql_lexer:string(Query),
-  parser:parse(Tokens);
+  mongoql_parser:parse(Tokens);
 parse(_Query) ->
   {error, unknow_input}.
 

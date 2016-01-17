@@ -19,4 +19,4 @@ logs
 _build
 rebar.lock
 src/mongoql_lexer.erl
-src/parser.erl
+src/mongoql_parser.erl
