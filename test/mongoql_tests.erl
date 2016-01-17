@@ -41,15 +41,26 @@ start() ->
 stop(_SetupData) ->
   ok.
 
+test_query(Query, Expect) ->
+  {ok, Result} = mongoql:parse(Query),
+  ?assertEqual(Result, Expect).
+
 query(_) ->
   fun() ->
-      Query = "house.temperature>23 house.city:\"Milano\" house.pression<:1015 +house.name",
-      {ok, Result} = mongoql:parse(Query),
-      Expect = {'$query',{'$and',[{<<"house.temperature">>,
-                                   {<<"$gt">>,23}},
-                                  {<<"house.city">>,{<<"$eq">>,<<"Milano">>}},
-                                  {<<"house.pression">>,{<<"$lte">>,1015}}]},
-                '$orderby',
-                [{<<"house.name">>,1}]},
-      ?assertEqual(Result, Expect)
+      test_query(
+        "house.temperature>23 house.city:\"Milano\" house.pression<:1015 +house.name",
+        {'$query',{'$and',[{<<"house.temperature">>,
+                            {<<"$gt">>,23}},
+                           {<<"house.city">>,{<<"$eq">>,<<"Milano">>}},
+                           {<<"house.pression">>,{<<"$lte">>,1015}}]},
+         '$orderby',
+         [{<<"house.name">>,1}]}),
+
+      test_query("a > 2", {'$query',{'$and',[{<<"a">>,{<<"$gt">>,2}}]}}),
+
+      test_query("-a", {'$orderby', [{<<"a">>, -1}]}),
+
+      test_query(<<"a!:2 +b">>,
+                 {'$query', {'$and', [{<<"a">>, {<<"$ne">>, 2}}]},
+                 '$orderby', [{<<"b">>, 1}]})
   end.

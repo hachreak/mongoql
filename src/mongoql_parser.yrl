@@ -28,6 +28,8 @@ Rootsymbol grammar.
 
 
 grammar -> filters orders : query('$1', '$2').
+grammar -> filters : filters('$1').
+grammar -> orders : orders('$1').
 
 filters -> filter : ['$1'].
 filters -> filter filters : ['$1' | '$2'].
@@ -49,6 +51,8 @@ order -> order_descending : {unwrap('$1'), -1}.
 Erlang code.
 
 query(Filters, Orders) -> {'$query', {'$and', Filters}, '$orderby', Orders}.
+filters(Filters) -> {'$query', {'$and', Filters}}.
+orders(Orders) -> {'$orderby', Orders}.
 
 unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V.

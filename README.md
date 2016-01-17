@@ -1,7 +1,7 @@
 mongoql
 =======
 
-An OTP library to translate a search query language in a MongoDB query.
+An OTP library to translate a special search query language in a MongoDB query.
 
 
 Examples
