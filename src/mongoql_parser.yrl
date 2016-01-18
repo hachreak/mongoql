@@ -19,7 +19,7 @@
 %%% @end
 
 Terminals
-  comp_op integer float order_ascending order_descending field string equal_op.
+  comp_op integer float timestamp order_ascending order_descending field string equal_op.
 
 Nonterminals
   filter order grammar filters orders.
@@ -36,6 +36,8 @@ filters -> filter filters : ['$1' | '$2'].
 orders -> order : ['$1'].
 orders -> order orders : ['$1' | '$2'].
 
+filter -> field equal_op timestamp : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field comp_op timestamp : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field equal_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field equal_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
