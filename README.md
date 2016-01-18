@@ -58,6 +58,17 @@ Op.           | Name             | Example
  {name}-desc  | Order Descending | `name-desc`
 
 
+Types supported
+---------------
+
+Type     | Example
+---------|----------------------
+Integer  | `15`, `-23`, `543`
+Float    | `34.56`, `-235.32`
+String   | `"Hello world!"`
+Datetime | `2016-01-15T18:19:28Z`
+
+
 Build
 -----
 

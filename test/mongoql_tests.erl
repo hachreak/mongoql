@@ -60,6 +60,13 @@ query(_) ->
 
       test_query("a > 2", {'$query',{'$and',[{<<"a">>,{'$gt',2}}]}}),
 
+      test_query("a <: -2", {'$query',{'$and',[{<<"a">>,{'$lte',-2}}]}}),
+
+      test_query("a < -23.52", {'$query',{'$and',[{<<"a">>,{'$lt',-23.52}}]}}),
+
+      test_query("a : \"Hello World!\"",
+                 {'$query',{'$and',[{<<"a">>,{'$eq', <<"Hello World!">>}}]}}),
+
       test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
 
       test_query("a-desc", {'$orderby', [{<<"a">>, -1}]}),
