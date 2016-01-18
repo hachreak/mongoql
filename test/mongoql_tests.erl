@@ -55,6 +55,9 @@ query(_) ->
          '$orderby',
          [{<<"house.name">>,1}]}),
 
+      test_query("a > 2016-01-15T18:19:28Z",
+                 {'$query',{'$and',[{<<"a">>,{'$gt',{1452,881968,0}}}]}}),
+
       test_query("a > 2", {'$query',{'$and',[{<<"a">>,{'$gt',2}}]}}),
 
       test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
