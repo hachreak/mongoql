@@ -48,19 +48,22 @@ test_query(Query, Expect) ->
 query(_) ->
   fun() ->
       test_query(
-        "house.temperature>23 house.city:\"Milano\" house.pression<:1015 +house.name",
-        {'$query',{'$and',[{<<"house.temperature">>,
-                            {<<"$gt">>,23}},
-                           {<<"house.city">>,{<<"$eq">>,<<"Milano">>}},
-                           {<<"house.pression">>,{<<"$lte">>,1015}}]},
+        "house.temperature>23 house.city:\"Milano\" house.pression<:1015 house.name-asc",
+        {'$query',{'$and',[{<<"house.temperature">>, {'$gt',23}},
+                           {<<"house.city">>,{'$eq',<<"Milano">>}},
+                           {<<"house.pression">>,{'$lte',1015}}]},
          '$orderby',
          [{<<"house.name">>,1}]}),
 
-      test_query("a > 2", {'$query',{'$and',[{<<"a">>,{<<"$gt">>,2}}]}}),
+      test_query("a > 2", {'$query',{'$and',[{<<"a">>,{'$gt',2}}]}}),
 
-      test_query("-a", {'$orderby', [{<<"a">>, -1}]}),
+      test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
 
-      test_query(<<"a!:2 +b">>,
-                 {'$query', {'$and', [{<<"a">>, {<<"$ne">>, 2}}]},
+      test_query("a-desc", {'$orderby', [{<<"a">>, -1}]}),
+
+      test_query("a-desc b-asc", {'$orderby', [{<<"a">>, -1}, {<<"b">>, 1}]}),
+
+      test_query(<<"a!:2 b-asc">>,
+                 {'$query', {'$and', [{<<"a">>, {'$ne', 2}}]},
                  '$orderby', [{<<"b">>, 1}]})
   end.
