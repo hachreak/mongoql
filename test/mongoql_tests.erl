@@ -62,6 +62,8 @@ query(_) ->
 
       test_query("a <: -2", {'$query',{'$and',[{<<"a">>,{'$lte',-2}}]}}),
 
+      test_query("a >: -2", {'$query',{'$and',[{<<"a">>,{'$gte',-2}}]}}),
+
       test_query("a < -23.52", {'$query',{'$and',[{<<"a">>,{'$lt',-23.52}}]}}),
 
       test_query("a : \"Hello World!\"",
