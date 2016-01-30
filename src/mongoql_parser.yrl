@@ -19,10 +19,10 @@
 %%% @end
 
 Terminals
-  comp_op integer float timestamp order_ascending order_descending field string equal_op.
+  comp_op integer float timestamp order_ascending order_descending field string equal_op in_op square_bracket_open_op square_bracket_close_op.
 
 Nonterminals
-  filter order grammar filters orders.
+  filter order grammar filters orders variable variables.
 
 Rootsymbol grammar.
 
@@ -33,6 +33,7 @@ grammar -> orders : orders('$1').
 
 filters -> filter : ['$1'].
 filters -> filter filters : ['$1' | '$2'].
+
 orders -> order : ['$1'].
 orders -> order orders : ['$1' | '$2'].
 
@@ -45,10 +46,18 @@ filter -> field comp_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), un
 filter -> field equal_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field equal_op string : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field in_op square_bracket_open_op variables square_bracket_close_op : {unwrap('$1'), {in_op_conv(unwrap('$2')), unwrap('$4')}}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
 order -> order_descending : {unwrap('$1'), -1}.
 
+variables -> variable : [unwrap('$1')].
+variables -> variable variables : [unwrap('$1') | '$2'].
+
+variable -> string : '$1'.
+variable -> integer : unwrap('$1').
+variable -> float : unwrap('$1').
+variable -> timestamp : unwrap('$1').
 
 Erlang code.
 
@@ -57,7 +66,8 @@ filters(Filters) -> {'$query', {'$and', Filters}}.
 orders(Orders) -> {'$orderby', Orders}.
 
 unwrap({_,V})   -> V;
-unwrap({_,_,V}) -> V.
+unwrap({_,_,V}) -> V;
+unwrap(V) -> V.
 
 comp_op_conv(<<"<">>) -> '$lt';
 comp_op_conv(<<"<:">>) -> '$lte';
@@ -65,3 +75,5 @@ comp_op_conv(<<":">>) -> '$eq';
 comp_op_conv(<<">:">>) -> '$gte';
 comp_op_conv(<<">">>) -> '$gt';
 comp_op_conv(<<"!:">>) -> '$ne'.
+
+in_op_conv(<<"in">>) -> '$in'.

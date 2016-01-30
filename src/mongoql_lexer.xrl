@@ -34,6 +34,7 @@ DATE=[0-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]
 Rules.
 
 {WHITESPACE}+ : skip_token.
+in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
 {STRING} : {token, {string, TokenLine, list_to_binary(string:substr(TokenChars, 2, length(TokenChars) - 2))}}.
 {DATE}T{TIME}Z : {token, {timestamp, TokenLine, iso8601totimestamp(TokenChars)}}.
@@ -41,8 +42,10 @@ Rules.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+\-desc : {token, {order_descending, TokenLine, list_to_binary(string:substr(TokenChars, 1, length(TokenChars) - length("-desc")))}}.
 {LETTER}+\-asc : {token, {order_ascending, TokenLine, list_to_binary(string:substr(TokenChars, 1, length(TokenChars) - length("-asc")))}}.
-{EQUAL_OP} : {token, {equal_op, list_to_binary(TokenChars)}}.
-{COMP_OP} : {token, {comp_op, list_to_binary(TokenChars)}}.
+{EQUAL_OP} : {token, {equal_op, TokenLine, list_to_binary(TokenChars)}}.
+{COMP_OP} : {token, {comp_op, TokenLine, list_to_binary(TokenChars)}}.
+\[ : {token, {square_bracket_open_op, TokenLine, list_to_binary(TokenChars)}}.
+\] : {token, {square_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
 [.]+ : {error, syntax}.
 
 Erlang code.

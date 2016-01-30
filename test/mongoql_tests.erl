@@ -77,5 +77,18 @@ query(_) ->
 
       test_query(<<"a!:2 b-asc">>,
                  {'$query', {'$and', [{<<"a">>, {'$ne', 2}}]},
-                 '$orderby', [{<<"b">>, 1}]})
+                 '$orderby', [{<<"b">>, 1}]}),
+
+      test_query(<<"a in [1]">>,
+                 {'$query', {'$and', [{<<"a">>, {'$in', [1]}}]}}),
+
+      test_query(<<"a in [1 2]">>,
+                 {'$query', {'$and', [{<<"a">>, {'$in', [1, 2]}}]}}),
+
+      test_query(<<"a in [1 2.4 5]">>,
+                 {'$query', {'$and', [{<<"a">>, {'$in', [1, 2.4, 5]}}]}}),
+
+      test_query(<<"a in [1 2.4 5 \"hello\"]">>,
+                 {'$query', {'$and',
+                             [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}})
   end.
