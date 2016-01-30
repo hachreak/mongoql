@@ -37,15 +37,10 @@ filters -> filter filters : ['$1' | '$2'].
 orders -> order : ['$1'].
 orders -> order orders : ['$1' | '$2'].
 
-filter -> field equal_op timestamp : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field comp_op timestamp : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field equal_op variable : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field comp_op variable : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field equal_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field comp_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field equal_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field comp_op integer : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field equal_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field comp_op float : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field equal_op string : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
 filter -> field in_op square_bracket_open_op variables square_bracket_close_op : {unwrap('$1'), {in_op_conv(unwrap('$2')), unwrap('$4')}}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
@@ -54,10 +49,10 @@ order -> order_descending : {unwrap('$1'), -1}.
 variables -> variable : [unwrap('$1')].
 variables -> variable variables : [unwrap('$1') | '$2'].
 
+variable -> timestamp : '$1'.
 variable -> string : '$1'.
 variable -> integer : unwrap('$1').
 variable -> float : unwrap('$1').
-variable -> timestamp : unwrap('$1').
 
 Erlang code.
 

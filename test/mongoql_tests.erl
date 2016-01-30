@@ -42,8 +42,9 @@ stop(_SetupData) ->
   ok.
 
 test_query(Query, Expect) ->
+  io:format("test: ~p~n", [Query]),
   {ok, Result} = mongoql:parse(Query),
-  ?assertEqual(Result, Expect).
+  ?assertEqual(Expect, Result).
 
 query(_) ->
   fun() ->
