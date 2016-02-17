@@ -33,14 +33,6 @@
 %% API functions
 %%====================================================================
 
-% init() ->
-%   % compile lexer
-%   leex:file(lexer),
-%   c(lexer),
-%   % compile parser
-%   yecc:file(parser),
-%   c(parser).
-
 -spec parse(query()) -> {ok, list()} | {error, unknow_input}.
 parse(Query) when is_binary(Query) ->
   parse(binary_to_list(Query));

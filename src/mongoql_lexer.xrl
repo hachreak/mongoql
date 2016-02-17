@@ -37,7 +37,7 @@ Rules.
 in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
 {STRING} : {token, {string, TokenLine, list_to_binary(string:substr(TokenChars, 2, length(TokenChars) - 2))}}.
-{DATE}T{TIME}Z : {token, {timestamp, TokenLine, iso8601totimestamp(TokenChars)}}.
+{DATE}T{TIME}Z : {token, {timestamp, TokenLine, mongoql_utils:iso8601totimestamp(TokenChars)}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+\-desc : {token, {order_descending, TokenLine, list_to_binary(string:substr(TokenChars, 1, length(TokenChars) - length("-desc")))}}.
@@ -50,12 +50,3 @@ in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
 
 Erlang code.
 
-iso8601totimestamp(DateTimeString) ->
-  DateTime = lists:map(fun(V) -> list_to_integer(V) end,
-                       string:tokens(DateTimeString, ":T-Z")),
-  datetime2timestamp(DateTime).
-
-datetime2timestamp([Y, M, D, H, Min, S]) ->
-  Seconds = calendar:datetime_to_gregorian_seconds(
-              {{Y, M, D}, {H, Min, S}}) - 62167219200,
-  {Seconds div 1000000, Seconds rem 1000000, 0}.
