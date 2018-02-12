@@ -56,18 +56,18 @@ query(_) ->
          [{<<"house.name">>,1}]}),
 
       test_query("a > 2016-01-15T18:19:28Z",
-                 {'$query',{'$and',[{<<"a">>,{'$gt',{1452,881968,0}}}]}}),
+                 {'$and',[{<<"a">>,{'$gt',{1452,881968,0}}}]}),
 
-      test_query("a > 2", {'$query',{'$and',[{<<"a">>,{'$gt',2}}]}}),
+      test_query("a > 2", {'$and',[{<<"a">>,{'$gt',2}}]}),
 
-      test_query("a <: -2", {'$query',{'$and',[{<<"a">>,{'$lte',-2}}]}}),
+      test_query("a <: -2", {'$and',[{<<"a">>,{'$lte',-2}}]}),
 
-      test_query("a >: -2", {'$query',{'$and',[{<<"a">>,{'$gte',-2}}]}}),
+      test_query("a >: -2", {'$and',[{<<"a">>,{'$gte',-2}}]}),
 
-      test_query("a < -23.52", {'$query',{'$and',[{<<"a">>,{'$lt',-23.52}}]}}),
+      test_query("a < -23.52", {'$and',[{<<"a">>,{'$lt',-23.52}}]}),
 
       test_query("a : \"Hello World!\"",
-                 {'$query',{'$and',[{<<"a">>,{'$eq', <<"Hello World!">>}}]}}),
+                 {'$and',[{<<"a">>,{'$eq', <<"Hello World!">>}}]}),
 
       test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
 
@@ -80,18 +80,17 @@ query(_) ->
                  '$orderby', [{<<"b">>, 1}]}),
 
       test_query(<<"a in [1]">>,
-                 {'$query', {'$and', [{<<"a">>, {'$in', [1]}}]}}),
+                 {'$and', [{<<"a">>, {'$in', [1]}}]}),
 
       test_query(<<"a in [1 2]">>,
-                 {'$query', {'$and', [{<<"a">>, {'$in', [1, 2]}}]}}),
+                 {'$and', [{<<"a">>, {'$in', [1, 2]}}]}),
 
       test_query(<<"a in [1 2.4 5]">>,
-                 {'$query', {'$and', [{<<"a">>, {'$in', [1, 2.4, 5]}}]}}),
+                 {'$and', [{<<"a">>, {'$in', [1, 2.4, 5]}}]}),
 
       test_query(<<"a in [1 2.4 5 \"hello\"]">>,
-                 {'$query', {'$and',
-                             [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}}),
+                 {'$and', [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}),
 
       test_query(<<"_id ~ \"plut*\"">>,
-                 {'$query',{'$and',[{<<"_id">>, {'$regex',<<"plut*">>}}]}})
+                 {'$and',[{<<"_id">>, {'$regex',<<"plut*">>}}]})
   end.

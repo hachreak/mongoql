@@ -58,7 +58,7 @@ compare_op -> comp_op : '$1'.
 Erlang code.
 
 query(Filters, Orders) -> {'$query', {'$and', Filters}, '$orderby', Orders}.
-filters(Filters) -> {'$query', {'$and', Filters}}.
+filters(Filters) -> {'$and', Filters}.
 orders(Orders) -> {'$orderby', Orders}.
 
 unwrap({_,V})   -> V;
