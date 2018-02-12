@@ -70,6 +70,7 @@ comp_op_conv(<<"<:">>) -> '$lte';
 comp_op_conv(<<":">>) -> '$eq';
 comp_op_conv(<<">:">>) -> '$gte';
 comp_op_conv(<<">">>) -> '$gt';
-comp_op_conv(<<"!:">>) -> '$ne'.
+comp_op_conv(<<"!:">>) -> '$ne';
+comp_op_conv(<<"~">>) -> '$regex'.
 
 in_op_conv(<<"in">>) -> '$in'.

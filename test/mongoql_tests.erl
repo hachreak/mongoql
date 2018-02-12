@@ -42,7 +42,6 @@ stop(_SetupData) ->
   ok.
 
 test_query(Query, Expect) ->
-  io:format("test: ~p~n", [Query]),
   {ok, Result} = mongoql:parse(Query),
   ?assertEqual(Expect, Result).
 
@@ -91,5 +90,8 @@ query(_) ->
 
       test_query(<<"a in [1 2.4 5 \"hello\"]">>,
                  {'$query', {'$and',
-                             [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}})
+                             [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}}),
+
+      test_query(<<"_id ~ \"plut*\"">>,
+                 {'$query',{'$and',[{<<"_id">>, {'$regex',<<"plut*">>}}]}})
   end.
