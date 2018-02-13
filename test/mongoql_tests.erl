@@ -41,6 +41,9 @@ start() ->
 stop(_SetupData) ->
   ok.
 
+test_exception(Query, Exception) ->
+  ?assertThrow(Exception, mongoql:parse(Query)).
+
 test_query(Query, Expect) ->
   {ok, Result} = mongoql:parse(Query),
   ?assertEqual(Expect, Result).
@@ -91,6 +94,14 @@ query(_) ->
       test_query(<<"a in [1 2.4 5 \"hello\"]">>,
                  {'$and', [{<<"a">>, {'$in', [1, 2.4, 5, <<"hello">>]}}]}),
 
-      test_query(<<"_id ~ \"plut*\"">>,
-                 {'$and',[{<<"_id">>, {'$regex',<<"plut*">>}}]})
+      test_query(<<"_id ~ \"pluto\"">>,
+                 {'$and',[{<<"_id">>, {'$regex',<<"pluto">>}}]}),
+
+      test_exception(<<"_id ~ \"plut*\"">>, invalid_regex),
+
+      test_query(<<"_id ~ \"^plu.o$\"">>,
+                 {'$and',[{<<"_id">>, {'$regex',<<"^plu.o$">>}}]}),
+
+      test_query(<<"_id ~ \"plu.o\"">>,
+                 {'$and',[{<<"_id">>, {'$regex',<<"plu.o">>}}]})
   end.

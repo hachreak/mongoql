@@ -37,8 +37,8 @@ filters -> filter filters : ['$1' | '$2'].
 orders -> order : ['$1'].
 orders -> order orders : ['$1' | '$2'].
 
-filter -> field compare_op variable : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
-filter -> field compare_op field : {unwrap('$1'), {comp_op_conv(unwrap('$2')), unwrap('$3')}}.
+filter -> field compare_op variable : {unwrap('$1'), comp_op_conv(var, unwrap('$2'), unwrap('$3'))}.
+filter -> field compare_op field : {unwrap('$1'), comp_op_conv(field, unwrap('$2'), unwrap('$3'))}.
 filter -> field in_op square_bracket_open_op variables square_bracket_close_op : {unwrap('$1'), {in_op_conv(unwrap('$2')), unwrap('$4')}}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
@@ -65,12 +65,17 @@ unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V;
 unwrap(V) -> V.
 
-comp_op_conv(<<"<">>) -> '$lt';
-comp_op_conv(<<"<:">>) -> '$lte';
-comp_op_conv(<<":">>) -> '$eq';
-comp_op_conv(<<">:">>) -> '$gte';
-comp_op_conv(<<">">>) -> '$gt';
-comp_op_conv(<<"!:">>) -> '$ne';
-comp_op_conv(<<"~">>) -> '$regex'.
+comp_op_conv(_, <<"<">>, Var) -> {'$lt', Var};
+comp_op_conv(_, <<"<:">>, Var) -> {'$lte', Var};
+comp_op_conv(_, <<":">>, Var) -> {'$eq', Var};
+comp_op_conv(_, <<">:">>, Var) -> {'$gte', Var};
+comp_op_conv(_, <<">">>, Var) -> {'$gt', Var};
+comp_op_conv(_, <<"!:">>, Var) -> {'$ne', Var};
+comp_op_conv(var, <<"~">>, Var) ->
+  case re:run(Var, "^[0-9A-Za-z^$\.]+$") of
+    nomatch -> throw(invalid_regex);
+    _ -> {'$regex', Var}
+  end;
+comp_op_conv(_, _, _) -> throw(invalid_regex).
 
 in_op_conv(<<"in">>) -> '$in'.
