@@ -48,6 +48,10 @@ test_query(Query, Expect) ->
   {ok, Result} = mongoql:parse(Query),
   ?assertEqual(Expect, Result).
 
+test_query(Query, Args, Expect) ->
+  {ok, Result} = mongoql:parse(Query, Args),
+  ?assertEqual(Expect, Result).
+
 query(_) ->
   fun() ->
       test_query(
@@ -105,3 +109,12 @@ query(_) ->
       test_query(<<"_id ~ \"plu.o\"">>,
                  {'$and',[{<<"_id">>, {'$regex',<<"plu.o">>}}]})
   end.
+
+parse_args_test() ->
+  test_query(
+    "{{object}}.temperature>23 {{object}}.city:\"{{city}}\"",
+    [{object, "house"}, {city, "Milano"}],
+    {'$and',[
+      {<<"house.temperature">>, {'$gt',23}},
+      {<<"house.city">>,{'$eq',<<"Milano">>}}
+    ]}).

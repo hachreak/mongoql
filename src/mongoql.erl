@@ -21,7 +21,10 @@
 -module('mongoql').
 
 %% API exports
--export([parse/1]).
+-export([
+  parse/1,
+  parse/2
+]).
 
 -export_type([query/0]).
 
@@ -32,6 +35,8 @@
 %%====================================================================
 %% API functions
 %%====================================================================
+
+parse(Query, Args) -> parse(sf:format(Query, Args)).
 
 -spec parse(query()) -> {ok, list()} | {error, unknow_input}.
 parse(Query) when is_binary(Query) ->
