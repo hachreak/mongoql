@@ -76,6 +76,9 @@ query(_) ->
       test_query("a : \"Hello World!\"",
                  {'$and',[{<<"a">>,{'$eq', <<"Hello World!">>}}]}),
 
+      test_query("a : \"Hello-World!\"",
+                 {'$and',[{<<"a">>,{'$eq', <<"Hello-World!">>}}]}),
+
       test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
 
       test_query("a-desc", {'$orderby', [{<<"a">>, -1}]}),
@@ -107,7 +110,12 @@ query(_) ->
                  {'$and',[{<<"_id">>, {'$regex',<<"^plu.o$">>}}]}),
 
       test_query(<<"_id ~ \"plu.o\"">>,
-                 {'$and',[{<<"_id">>, {'$regex',<<"plu.o">>}}]})
+                 {'$and',[{<<"_id">>, {'$regex',<<"plu.o">>}}]}),
+
+      test_query(<<"_id ~ \"plu-to\"">>,
+                 {'$and',[{<<"_id">>, {'$regex',<<"plu-to">>}}]}),
+
+      ok
   end.
 
 parse_args_test() ->

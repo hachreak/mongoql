@@ -72,7 +72,7 @@ comp_op_conv(_, <<">:">>, Var) -> {'$gte', Var};
 comp_op_conv(_, <<">">>, Var) -> {'$gt', Var};
 comp_op_conv(_, <<"!:">>, Var) -> {'$ne', Var};
 comp_op_conv(var, <<"~">>, Var) ->
-  case re:run(Var, "^[0-9A-Za-z^$\.]+$") of
+  case re:run(Var, "^[\-0-9A-Za-z^$\.]+$") of
     nomatch -> throw(invalid_regex);
     _ -> {'$regex', Var}
   end;

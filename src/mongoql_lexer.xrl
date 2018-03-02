@@ -23,7 +23,7 @@ Definitions.
 INT = [0-9]
 FLOAT = [0-9]+\.[0-9]+
 LETTER = [a-zA-Z_\.]
-STRING = "(\\\^.|\\.|[^\"])*"
+STRING = "[\-\$\.\^\*\!\sa-zA-Z_]+"
 WHITESPACE = [\s\t\n\r]
 ARITHM_OP = [+-]
 EQUAL_OP = (:|!:|~)
