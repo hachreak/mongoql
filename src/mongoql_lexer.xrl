@@ -22,7 +22,7 @@ Definitions.
 
 INT = [0-9]
 FLOAT = [0-9]+\.[0-9]+
-LETTER = [a-zA-Z_\.]
+LETTER = [a-zA-Z_\.0-9]
 STRING = "[\-\$\.\^\*\!\sa-zA-Z_0-9]+"
 WHITESPACE = [\s\t\n\r]
 ARITHM_OP = [+-]
@@ -35,11 +35,11 @@ Rules.
 
 {WHITESPACE}+ : skip_token.
 in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
+{ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
+{ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
 {STRING} : {token, {string, TokenLine, list_to_binary(string:substr(TokenChars, 2, length(TokenChars) - 2))}}.
 {DATE}T{TIME}Z : {token, {timestamp, TokenLine, mongoql_utils:iso8601totimestamp(TokenChars)}}.
-{ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
-{ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+\-desc : {token, {order_descending, TokenLine, list_to_binary(string:substr(TokenChars, 1, length(TokenChars) - length("-desc")))}}.
 {LETTER}+\-asc : {token, {order_ascending, TokenLine, list_to_binary(string:substr(TokenChars, 1, length(TokenChars) - length("-asc")))}}.
 {EQUAL_OP} : {token, {equal_op, TokenLine, list_to_binary(TokenChars)}}.

@@ -115,6 +115,9 @@ query(_) ->
       test_query(<<"_id ~ \"plu-to\"">>,
                  {'$and',[{<<"_id">>, {'$regex',<<"plu-to">>}}]}),
 
+      test_query("slots.1 > 1",
+                 {'$and',[{<<"slots.1">>, {'$gt', 1}}]}),
+
       ok
   end.
 
