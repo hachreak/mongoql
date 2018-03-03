@@ -76,8 +76,8 @@ query(_) ->
       test_query("a : \"Hello World!\"",
                  {'$and',[{<<"a">>,{'$eq', <<"Hello World!">>}}]}),
 
-      test_query("a : \"Hello-World!\"",
-                 {'$and',[{<<"a">>,{'$eq', <<"Hello-World!">>}}]}),
+      test_query("a : \"H3llo-W0rld!\"",
+                 {'$and',[{<<"a">>,{'$eq', <<"H3llo-W0rld!">>}}]}),
 
       test_query("a-asc", {'$orderby', [{<<"a">>, 1}]}),
 
