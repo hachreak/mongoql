@@ -22,6 +22,7 @@
 
 %% API exports
 -export([
+  build/2,
   parse/1,
   parse/2
 ]).
@@ -35,6 +36,29 @@
 %%====================================================================
 %% API functions
 %%====================================================================
+
+% @doc Build a query with predefined parameters.
+% build("latitude:12 longitude:23", [{'temperature', 12}]).
+% It's the same to parse:
+% parse("latitude:12 longitude:23 temperature:12").
+% Or
+% parse("latitude:12 longitude:23 temperature:{{temp}}", [{temp, 12}]).
+% @end
+-spec build(query(), list()) -> list().
+build(Query, Args) when is_list(Query) ->
+  try
+    Query2 = lists:foldl(
+      fun({Key, Value}, Acc) when is_list(Value) or is_binary(Value) ->
+        Acc ++ sf:format(" {{key}}:\"{{{{key}}}}\"", [{key, Key}], [string]);
+         ({Key, _Value}, Acc) ->
+        Acc ++ sf:format(" {{key}}:{{{{key}}}}", [{key, Key}], [string])
+      end, "", Args),
+    mongoql:parse(Query ++ Query2, Args)
+  catch
+    _:_ -> {error, invalid_query}
+  end;
+build(Query, Args) ->
+  build(binary_to_list(Query), Args).
 
 parse(Query, Args) -> parse(sf:format(Query, Args)).
 

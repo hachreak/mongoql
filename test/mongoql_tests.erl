@@ -129,3 +129,14 @@ parse_args_test() ->
       {<<"house.temperature">>, {'$gt',23}},
       {<<"house.city">>,{'$eq',<<"Milano">>}}
     ]}).
+
+build_test() ->
+  ?assertEqual(
+    {ok, {'$and',[
+      {<<"latitude">>, {'$eq', 12}},
+      {<<"longitude">>, {'$eq', 23}},
+      {<<"temperature">>, {'$eq',15}},
+      {<<"name">>, {'$eq', <<"Milano">>}}
+    ]}},
+    mongoql:build("latitude:12 longitude:23",
+                  [{'temperature', 15}, {'name', "Milano"}])).
