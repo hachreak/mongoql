@@ -57,6 +57,7 @@ Op.            | Name             | Example
 `!:`           | Not Equal        | `temperature !: 4` or `name !: "FuuBar"`
 `~`            | Regex            | `name ~ "Mi*"`
 `in`           | In               | `temperature in [16 17 18]` or `city in ["Milano" "Roma"]`
+`not`          | Not              | `not temperature > 5`
 `{name}-asc`   | Order Ascending  | `name-asc`
 `{name}-desc`  | Order Descending | `name-desc`
 

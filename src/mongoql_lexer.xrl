@@ -35,6 +35,7 @@ Rules.
 
 {WHITESPACE}+ : skip_token.
 in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
+not : {token, {not_op, TokenLine, list_to_binary(TokenChars)}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.

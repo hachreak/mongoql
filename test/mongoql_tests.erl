@@ -118,6 +118,9 @@ query(_) ->
       test_query("slots.1 > 1",
                  {'$and',[{<<"slots.1">>, {'$gt', 1}}]}),
 
+      test_query("not slots.1 > 1",
+                 {'$and',[{<<"slots.1">>, {'$not', {'$gt', 1}}}]}),
+
       ok
   end.
 
