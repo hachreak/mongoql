@@ -57,10 +57,13 @@ Op.            | Name             | Example
 `!:`           | Not Equal        | `temperature !: 4` or `name !: "FuuBar"`
 `~`            | Regex            | `name ~ "Mi*"`
 `in`           | In               | `temperature in [16 17 18]` or `city in ["Milano" "Roma"]`
-`not`          | Not              | `not temperature > 5`
+`not`          | Not              | `not temperature > 5` or `not name in ["Milano" "Roma"]`
+`exists`       | Exists*(#)        | `name exists` or `not name exists`
 `{name}-asc`   | Order Ascending  | `name-asc`
 `{name}-desc`  | Order Descending | `name-desc`
 
+
+(#) matches the documents that contain the field.
 
 Types supported
 ---------------

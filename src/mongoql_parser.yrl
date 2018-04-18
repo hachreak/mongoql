@@ -21,7 +21,7 @@
 Terminals
   comp_op integer float timestamp order_ascending order_descending field
   string equal_op in_op square_bracket_open_op square_bracket_close_op
-  not_op.
+  not_op exists_op.
 
 Nonterminals
   filter order grammar filters orders variable variables compare_op compare.
@@ -45,6 +45,7 @@ filter -> not_op field compare : uni_op(unwrap('$1'), unwrap('$2'), '$3').
 compare -> compare_op variable : comp_op_conv(var, unwrap('$1'), unwrap('$2')).
 compare -> compare_op field : comp_op_conv(field, unwrap('$1'), unwrap('$2')).
 compare -> in_op square_bracket_open_op variables square_bracket_close_op : {in_op_conv(unwrap('$1')), unwrap('$3')}.
+compare -> exists_op : {'$exists', true}.
 
 order -> order_ascending : {unwrap('$1'), 1}.
 order -> order_descending : {unwrap('$1'), -1}.
@@ -70,7 +71,11 @@ unwrap({_,V})   -> V;
 unwrap({_,_,V}) -> V;
 unwrap(V) -> V.
 
-uni_op(<<"not">>, Name, Rest) -> {Name, {'$not', Rest}}.
+uni_op(<<"not">>, Name, Rest) ->
+  case Rest of
+    {'$exists', true} -> {Name, {'$exists', false}};
+    _ -> {Name, {'$not', Rest}}
+  end.
 
 comp_op_conv(_, <<"<">>, Var) -> {'$lt', Var};
 comp_op_conv(_, <<"<:">>, Var) -> {'$lte', Var};
