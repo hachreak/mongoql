@@ -37,6 +37,7 @@ Rules.
 in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
 not : {token, {not_op, TokenLine, list_to_binary(TokenChars)}}.
 exists : {token, {exists_op, TokenLine, list_to_binary(TokenChars)}}.
+now : {token, {timestamp, TokenLine, erlang:timestamp()}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.

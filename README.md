@@ -39,7 +39,7 @@ How to use
 ----------
 
 ```erlang
-MyQueryString = "house.temperature>23 house.city:\"Milano\" house.pression<:1015 house.when>2017-12-15T10:20:00Z house.name-asc",
+MyQueryString = "house.temperature>23 house.city:\"Milano\" house.pression<:1015 house.when>2017-12-15T10:20:00Z house.when < now house.name-asc",
 {ok, Query} = mongoql:parse(MyQueryString),
 mongopool_app:find(Pool, Table, Query).
 ```
@@ -74,6 +74,7 @@ Integer  | `15`, `-23`, `543`
 Float    | `34.56`, `-235.32`
 String   | `"Hello world!"`
 Datetime | `2016-01-15T18:19:28Z` (Note: without doublequote)
+Datetime | `now` (automatically translated with now datetime of the server
 
 
 Build
