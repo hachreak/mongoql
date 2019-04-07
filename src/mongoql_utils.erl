@@ -21,7 +21,12 @@
 -module('mongoql_utils').
 
 %% API exports
--export([iso8601totimestamp/1, datetime2timestamp/1]).
+-export([
+  datetime2timestamp/1,
+  iso8601totimestamp/1,
+  now_less_interval/3,
+  remove_spaces/1
+]).
 
 
 iso8601totimestamp(DateTimeString) ->
@@ -30,6 +35,20 @@ iso8601totimestamp(DateTimeString) ->
   datetime2timestamp(DateTime).
 
 datetime2timestamp([Y, M, D, H, Min, S]) ->
-  Seconds = calendar:datetime_to_gregorian_seconds(
-              {{Y, M, D}, {H, Min, S}}) - 62167219200,
+  Seconds = datetime2seconds({{Y, M, D}, {H, Min, S}}),
   {Seconds div 1000000, Seconds rem 1000000, 0}.
+
+now_less_interval(Now, Num, "s") ->
+  Seconds = datetime2seconds(calendar:now_to_datetime(Now)) + Num,
+  {Seconds div 1000000, Seconds rem 1000000, 0};
+now_less_interval(Now, Num, "m") ->
+  now_less_interval(Now, Num * 60, "s");
+now_less_interval(Now, Num, "h") ->
+  now_less_interval(Now, Num * 3600, "s").
+
+datetime2seconds({{Y, M, D}, {H, Min, S}}) ->
+  calendar:datetime_to_gregorian_seconds(
+              {{Y, M, D}, {H, Min, S}}) - 62167219200.
+
+remove_spaces(String) ->
+  re:replace(String, "(\\s+)", "", [global,{return,list}]).

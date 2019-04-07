@@ -38,6 +38,7 @@ in : {token, {in_op, TokenLine, list_to_binary(TokenChars)}}.
 not : {token, {not_op, TokenLine, list_to_binary(TokenChars)}}.
 exists : {token, {exists_op, TokenLine, list_to_binary(TokenChars)}}.
 now : {token, {timestamp, TokenLine, erlang:timestamp()}}.
+now\s*{ARITHM_OP}\s*{INT}\s*[hms] : {token, {timestamp, TokenLine, split_interval(TokenChars)}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
@@ -53,3 +54,9 @@ now : {token, {timestamp, TokenLine, erlang:timestamp()}}.
 
 Erlang code.
 
+split_interval(String) ->
+  Now = erlang:timestamp(),
+  error_logger:error_msg("string ~p~n", [mongoql_utils:remove_spaces(String)]),
+  [Split] = string:tokens(mongoql_utils:remove_spaces(String), "now"),
+  {Num, Time} = string:to_integer(Split),
+  mongoql_utils:now_less_interval(Now, Num, Time).

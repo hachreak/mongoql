@@ -30,7 +30,8 @@ mongoql_test_() ->
     fun stop/1,
     fun (SetupData) ->
         [
-         query(SetupData)
+         query(SetupData),
+         check_now_quiries(SetupData)
         ]
     end
   }.
@@ -131,6 +132,26 @@ query(_) ->
       test_query("not name exists", {'$and',[{<<"name">>,{'$exists',false}}]}),
 
       ok
+  end.
+
+check_now_quiries(_) ->
+  fun() ->
+    {MS, S, _} = erlang:timestamp(),
+
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S, _}}}]}} = mongoql:parse("date < now"),
+    S2 = S - 5,
+
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S2, _}}}]}} = mongoql:parse("date < now-5s"),
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S2, _}}}]}} = mongoql:parse("date < now -5s"),
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S2, _}}}]}} = mongoql:parse("date < now - 5s"),
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S2, _}}}]}} = mongoql:parse("date < now - 5 s"),
+
+    S3 = S - (5*60),
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S3, _}}}]}} = mongoql:parse("date < now-5m"),
+
+    S4 = S - (1*3600),
+    {ok, {'$and',[{<<"date">>,{'$lt', {MS, S4, _}}}]}} = mongoql:parse("date < now-1h"),
+    ok
   end.
 
 parse_args_test() ->

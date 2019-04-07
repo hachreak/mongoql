@@ -75,6 +75,7 @@ Float    | `34.56`, `-235.32`
 String   | `"Hello world!"`
 Datetime | `2016-01-15T18:19:28Z` (Note: without doublequote)
 Datetime | `now` (automatically translated with now datetime of the server
+Datetime | `now - 1h`, `now - 1m`, `now - 1s`
 
 
 Build
