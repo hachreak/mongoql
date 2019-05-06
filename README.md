@@ -3,7 +3,8 @@ mongoql
 
 [![Build Status](https://travis-ci.org/hachreak/mongoql.svg?branch=master)](https://travis-ci.org/hachreak/mongoql)
 
-An OTP library to translate a special search query language in a MongoDB query.
+An OTP library to translate a special search query language
+(including aggregation) in MongoDB query.
 
 Note: the queries are compatible with
 [mongodb-erlang](https://github.com/comtihon/mongodb-erlang) package.
