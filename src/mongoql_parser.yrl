@@ -21,10 +21,12 @@
 Terminals
   comp_op integer float timestamp order_ascending order_descending field
   string equal_op in_op square_bracket_open_op square_bracket_close_op
-  not_op exists_op.
+  not_op exists_op agg_op round_bracket_open_op round_bracket_close_op
+  match_op.
 
 Nonterminals
-  filter order grammar filters orders variable variables compare_op compare.
+  filter order grammar filters orders variable variables compare_op compare
+  aggs agg agg_value.
 
 Rootsymbol grammar.
 
@@ -32,6 +34,8 @@ Rootsymbol grammar.
 grammar -> filters orders : query('$1', '$2').
 grammar -> filters : filters('$1').
 grammar -> orders : orders('$1').
+grammar -> agg_op aggs match_op filters : [{'$group', '$2'}, {'$match', '$4'}].
+grammar -> agg_op aggs : [{'$group', '$2'}].
 
 filters -> filter : ['$1'].
 filters -> filter filters : ['$1' | '$2'].
@@ -60,6 +64,17 @@ variable -> float : unwrap('$1').
 
 compare_op -> equal_op : '$1'.
 compare_op -> comp_op : '$1'.
+
+% Aggregation queries
+
+aggs -> agg: ['$1'].
+aggs -> agg aggs: ['$1' | '$2'].
+
+agg -> field equal_op agg_value : {unwrap('$1'), '$3'}.
+
+agg_value -> field round_bracket_open_op field round_bracket_close_op : {dollar(unwrap('$1')), dollar(unwrap('$3'))}.
+agg_value -> field : {dollar(unwrap('$1'))}.
+
 
 Erlang code.
 
@@ -91,3 +106,5 @@ comp_op_conv(var, <<"~">>, Var) ->
 comp_op_conv(_, _, _) -> throw(invalid_regex).
 
 in_op_conv(<<"in">>) -> '$in'.
+
+dollar(Value) -> << <<"$">>/binary, Value/binary >>.

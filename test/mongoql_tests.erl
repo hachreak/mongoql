@@ -131,6 +131,17 @@ query(_) ->
 
       test_query("not name exists", {'$and',[{<<"name">>,{'$exists',false}}]}),
 
+      test_query("$agg avg_temp: avg(weather.temperature) count: sum",
+                 [{'$group',[{<<"avg_temp">>,
+                              {<<"$avg">>,<<"$weather.temperature">>}},
+                             {<<"count">>,{<<"$sum">>}}]}]),
+
+      test_query("$agg avg_temp: avg(weather.temperature) count: sum
+                  $match _id._uid:\"abc\"",
+                 [{'$group',[{<<"avg_temp">>,
+                              {<<"$avg">>,<<"$weather.temperature">>}},
+                             {<<"count">>,{<<"$sum">>}}]},
+                  {'$match',[{<<"_id._uid">>,{'$eq',<<"abc">>}}]}]),
       ok
   end.
 

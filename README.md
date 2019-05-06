@@ -5,6 +5,8 @@ mongoql
 
 An OTP library to translate a special search query language in a MongoDB query.
 
+Note: the queries are compatible with
+[mongodb-erlang](https://github.com/comtihon/mongodb-erlang) package.
 
 Examples
 --------
@@ -38,8 +40,18 @@ mongopool_app:find(Pool, Table, Query).
 How to use
 ----------
 
+Simple query:
+
 ```erlang
 MyQueryString = "house.temperature>23 house.city:\"Milano\" house.pression<:1015 house.when>2017-12-15T10:20:00Z house.when < now house.name-asc",
+{ok, Query} = mongoql:parse(MyQueryString),
+mongopool_app:find(Pool, Table, Query).
+```
+
+Aggregation query:
+
+```erlang
+MyQueryString = "$agg temp: avg(house.temperature) $match house.when>2017-12-15T10:20:00Z",
 {ok, Query} = mongoql:parse(MyQueryString),
 mongopool_app:find(Pool, Table, Query).
 ```
@@ -58,7 +70,7 @@ Op.            | Name             | Example
 `~`            | Regex            | `name ~ "Mi*"`
 `in`           | In               | `temperature in [16 17 18]` or `city in ["Milano" "Roma"]`
 `not`          | Not              | `not temperature > 5` or `not name in ["Milano" "Roma"]`
-`exists`       | Exists*(#)        | `name exists` or `not name exists`
+`exists`       | Exists*(#)       | `name exists` or `not name exists`
 `{name}-asc`   | Order Ascending  | `name-asc`
 `{name}-desc`  | Order Descending | `name-desc`
 

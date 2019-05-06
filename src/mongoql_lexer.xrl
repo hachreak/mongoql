@@ -39,6 +39,8 @@ not : {token, {not_op, TokenLine, list_to_binary(TokenChars)}}.
 exists : {token, {exists_op, TokenLine, list_to_binary(TokenChars)}}.
 now : {token, {timestamp, TokenLine, erlang:timestamp()}}.
 now\s*{ARITHM_OP}\s*{INT}+\s*[hms] : {token, {timestamp, TokenLine, split_interval(TokenChars)}}.
+\$agg : {token, {agg_op, TokenLine, list_to_binary(TokenChars)}}.
+\$match : {token, {match_op, TokenLine, list_to_binary(TokenChars)}}.
 {ARITHM_OP}?{INT}+ : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
 {ARITHM_OP}?{INT}+\.{INT}+ : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {LETTER}+ : {token, {field, TokenLine, list_to_binary(TokenChars)}}.
@@ -50,6 +52,8 @@ now\s*{ARITHM_OP}\s*{INT}+\s*[hms] : {token, {timestamp, TokenLine, split_interv
 {COMP_OP} : {token, {comp_op, TokenLine, list_to_binary(TokenChars)}}.
 \[ : {token, {square_bracket_open_op, TokenLine, list_to_binary(TokenChars)}}.
 \] : {token, {square_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
+\( : {token, {round_bracket_open_op, TokenLine, list_to_binary(TokenChars)}}.
+\) : {token, {round_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
 [.]+ : {error, syntax}.
 
 Erlang code.
