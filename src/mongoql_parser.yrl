@@ -34,8 +34,9 @@ Rootsymbol grammar.
 grammar -> filters orders : query('$1', '$2').
 grammar -> filters : filters('$1').
 grammar -> orders : orders('$1').
-grammar -> agg_op aggs match_op filters : [{'$group', '$2'}, {'$match', '$4'}].
-grammar -> agg_op aggs : [{'$group', '$2'}].
+grammar -> agg_op aggs match_op filters :
+      [{'$group', maps:from_list('$2')}, {'$match', maps:from_list('$4')}].
+grammar -> agg_op aggs : [{'$group', maps:from_list('$2')}].
 
 filters -> filter : ['$1'].
 filters -> filter filters : ['$1' | '$2'].
@@ -73,7 +74,7 @@ aggs -> agg aggs: ['$1' | '$2'].
 agg -> field equal_op agg_value : {unwrap('$1'), '$3'}.
 
 agg_value -> field round_bracket_open_op field round_bracket_close_op : {dollar(unwrap('$1')), dollar(unwrap('$3'))}.
-agg_value -> field : {dollar(unwrap('$1'))}.
+agg_value -> field : {dollar(unwrap('$1')), 1}.
 
 
 Erlang code.
