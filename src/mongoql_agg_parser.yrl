@@ -22,7 +22,7 @@ Terminals
   comp_op integer float timestamp field
   string equal_op in_op square_bracket_open_op square_bracket_close_op
   not_op exists_op group_op round_bracket_open_op round_bracket_close_op
-  dollar_op.
+  dollar_op curly_bracket_open_op curly_bracket_close_op.
 
 Nonterminals
   filter grammar filters variable variables compare_op compare
@@ -64,6 +64,8 @@ aggs -> agg: ['$1'].
 aggs -> agg aggs: ['$1' | '$2'].
 
 agg -> field equal_op agg_value : {unwrap('$1'), '$3'}.
+agg -> field equal_op curly_bracket_open_op aggs curly_bracket_close_op :
+        {unwrap('$1'), maps:from_list('$4')}.
 
 agg_value -> dollar_op field round_bracket_open_op field round_bracket_close_op :
       {dollar(unwrap('$2')), dollar(unwrap('$4'))}.

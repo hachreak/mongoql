@@ -54,6 +54,8 @@ now\s*{ARITHM_OP}\s*{INT}+\s*[hms] : {token, {timestamp, TokenLine, split_interv
 \] : {token, {square_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
 \( : {token, {round_bracket_open_op, TokenLine, list_to_binary(TokenChars)}}.
 \) : {token, {round_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
+\{ : {token, {curly_bracket_open_op, TokenLine, list_to_binary(TokenChars)}}.
+\} : {token, {curly_bracket_close_op, TokenLine, list_to_binary(TokenChars)}}.
 [.]+ : {error, syntax}.
 
 Erlang code.
