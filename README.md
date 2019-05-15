@@ -9,8 +9,8 @@ An OTP library to translate a special search query language
 Note: the queries are compatible with
 [mongodb-erlang](https://github.com/comtihon/mongodb-erlang) package.
 
-Examples
---------
+Examples Query
+--------------
 
 E.g. select data where temperature>23 AND house is in Milano and
 pression <= 1015, ordered by house name ascending:
@@ -38,6 +38,16 @@ Query = {
 mongopool_app:find(Pool, Table, Query).
 ```
 
+Example Aggregation
+-------------------
+
+E.g. count how many times received a new log message today
+grouped by log level:
+
+```
+date > now-24h $group id: level count: $count(1)
+```
+
 How to use
 ----------
 
@@ -52,9 +62,9 @@ mongopool_app:find(Pool, Table, Query).
 Aggregation query:
 
 ```erlang
-MyQueryString = "$agg temp: avg(house.temperature) $match house.when>2017-12-15T10:20:00Z",
-{ok, Query} = mongoql:parse(MyQueryString),
-mongopool_app:find(Pool, Table, Query).
+MyAggString = "date > now-24h $group id: level count: $count(1)"
+{ok, Agg} = mongoql:agg(MyAggString),
+mongopool_app:command(Pool, TableInBinaryString, pipeline, Agg).
 ```
 
 Operators

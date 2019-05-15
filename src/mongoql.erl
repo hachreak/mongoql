@@ -22,6 +22,8 @@
 
 %% API exports
 -export([
+  agg/1,
+  agg/2,
   build/2,
   parse/1,
   parse/2
@@ -70,6 +72,16 @@ parse(Query) when is_list(Query) ->
   mongoql_parser:parse(Tokens);
 parse(_Query) ->
   {error, unknow_input}.
+
+agg(Query) when is_binary(Query) ->
+  agg(binary_to_list(Query));
+agg(Query) when is_list(Query) ->
+  {ok, Tokens, _} = mongoql_agg_lexer:string(Query),
+  mongoql_agg_parser:parse(Tokens);
+agg(_Query) ->
+  {error, unknow_input}.
+
+agg(Query, Args) -> agg(sf:format(Query, Args)).
 
 %%====================================================================
 %% Internal functions

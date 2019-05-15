@@ -31,6 +31,7 @@ mongoql_test_() ->
     fun (SetupData) ->
         [
          query(SetupData),
+         check_agg(SetupData),
          check_now_quiries(SetupData)
         ]
     end
@@ -51,6 +52,10 @@ test_query(Query, Expect) ->
 
 test_query(Query, Args, Expect) ->
   {ok, Result} = mongoql:parse(Query, Args),
+  ?assertEqual(Expect, Result).
+
+test_agg(Query, Expect) ->
+  {ok, Result} = mongoql:agg(Query),
   ?assertEqual(Expect, Result).
 
 query(_) ->
@@ -131,21 +136,21 @@ query(_) ->
 
       test_query("not name exists", {'$and',[{<<"name">>,{'$exists',false}}]}),
 
-      test_query(
-        "$agg avg_temp: avg(weather.temperature) count: sum",
-        [{'$group', #{
-          <<"avg_temp">> => {<<"$avg">>,<<"$weather.temperature">>},
-          <<"count">> => {<<"$sum">>, 1}
-         }}]),
+      ok
+  end.
 
-      test_query(
-        "$agg avg_temp: avg(weather.temperature) count: sum
-         $match _id._uid:\"abc\"",
-         [{'$group',#{
-             <<"avg_temp">> => {<<"$avg">>,<<"$weather.temperature">>},
-             <<"count">> => {<<"$sum">>, 1}
-          }},
-          {'$match', #{<<"_id._uid">> => {'$eq',<<"abc">>}}}]),
+check_agg(_) ->
+  fun() ->
+      test_agg(
+        "date > 2019-02-17T13:12:11Z $group " ++
+        "avg_temp: $avg(weather.temperature) count: $sum(1)",
+        [{'$match',{'$and',[{<<"date">>,
+                             {'$gt',{1550,409131,0}}}]}},
+         {'$group',#{<<"avg_temp">> =>
+                     {<<"$avg">>,<<"$weather.temperature">>},
+                     <<"count">> => {<<"$sum">>,<<"1">>}}}]
+      ),
+
       ok
   end.
 
