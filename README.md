@@ -45,7 +45,7 @@ E.g. count how many times received a new log message today
 grouped by log level:
 
 ```
-date > now-24h $group id: level count: $count(1)
+date > now-24h date-asc $group id: level count: $count(1)
 ```
 
 How to use
@@ -62,7 +62,7 @@ mongopool_app:find(Pool, Table, Query).
 Aggregation query:
 
 ```erlang
-MyAggString = "date > now-24h $group id: level count: $count(1)"
+MyAggString = "date > now-24h date-asc $group id: level count: $count(1)"
 {ok, Agg} = mongoql:agg(MyAggString),
 mongopool_app:command(Pool, TableInBinaryString, pipeline, Agg).
 ```

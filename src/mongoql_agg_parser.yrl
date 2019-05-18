@@ -19,21 +19,28 @@
 %%% @end
 
 Terminals
-  comp_op integer float timestamp field
+  comp_op integer float timestamp field order_ascending order_descending
   string equal_op in_op square_bracket_open_op square_bracket_close_op
   not_op exists_op group_op round_bracket_open_op round_bracket_close_op
   dollar_op curly_bracket_open_op curly_bracket_close_op.
 
 Nonterminals
-  filter grammar filters variable variables compare_op compare
+  filter order grammar filters orders variable variables compare_op compare
   aggs agg agg_value groups.
 
 Rootsymbol grammar.
 
 
+grammar -> filters orders groups: query('$1', '$2', '$3').
 grammar -> filters groups: query('$1', '$2').
 
 groups -> group_op aggs : '$2'.
+
+orders -> order : ['$1'].
+orders -> order orders : ['$1' | '$2'].
+
+order -> order_ascending : {unwrap('$1'), 1}.
+order -> order_descending : {unwrap('$1'), -1}.
 
 filters -> filter : ['$1'].
 filters -> filter filters : ['$1' | '$2'].
@@ -75,6 +82,12 @@ agg_value -> field : dollar(unwrap('$1')).
 
 
 Erlang code.
+
+query(Filters, Orders, Groups) -> [
+  {'$match', {'$and', Filters}},
+  {'$group', maps:from_list(Groups)},
+  {'$sort', maps:from_list(Orders)}
+].
 
 query(Filters, Groups) -> [
   {'$match', {'$and', Filters}},

@@ -165,6 +165,22 @@ check_agg(_) ->
                      {<<"$avg">>,<<"$weather.temperature">>}}}]
       ),
 
+      test_agg(
+        "date > 2019-02-17T13:12:11Z date-asc $group " ++
+        "_id: {day: $dayOfMonth(_insert) year: $year(_insert)} " ++
+        "avg_tmp: $avg(weather.temperature)",
+        [{'$match',{'$and',[{<<"date">>,{'$gt',{1550,409131,0}}}]}},
+         {'$group',#{<<"_id">> =>
+                     #{<<"day">> =>
+                       {<<"$dayOfMonth">>,<<"$_insert">>},
+                       <<"year">> =>
+                       {<<"$year">>,<<"$_insert">>}},
+                     <<"avg_tmp">> =>
+                     {<<"$avg">>,<<"$weather.temperature">>}}},
+         {'$sort',#{<<"date">> => 1}}
+        ]
+      ),
+
       ok
   end.
 
