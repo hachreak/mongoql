@@ -85,9 +85,8 @@ Erlang code.
 
 query(Filters, Orders, Groups) -> [
   {'$match', {'$and', Filters}},
-  {'$group', maps:from_list(Groups)},
-  {'$sort', maps:from_list(Orders)}
-].
+  {'$group', maps:from_list(Groups)}
+] ++ [{'$sort', #{K => V}} || {K, V} <- lists:reverse(Orders)].
 
 query(Filters, Groups) -> [
   {'$match', {'$and', Filters}},

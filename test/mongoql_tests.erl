@@ -180,6 +180,22 @@ check_agg(_) ->
          {'$sort',#{<<"date">> => 1}}
         ]
       ),
+      test_agg(
+        "date > 2019-02-17T13:12:11Z _id.year-asc _id.month-asc $group " ++
+        "_id: {month: $month(_insert) year: $year(_insert)} " ++
+        "avg_tmp: $avg(weather.temperature)",
+        [{'$match',{'$and',[{<<"date">>,{'$gt',{1550,409131,0}}}]}},
+         {'$group',#{<<"_id">> =>
+                     #{<<"month">> =>
+                       {<<"$month">>,<<"$_insert">>},
+                       <<"year">> =>
+                       {<<"$year">>,<<"$_insert">>}},
+                     <<"avg_tmp">> =>
+                     {<<"$avg">>,<<"$weather.temperature">>}}},
+         {'$sort', #{<<"_id.month">> => 1}},
+         {'$sort', #{<<"_id.year">> => 1}}
+        ]
+      ),
 
       ok
   end.
